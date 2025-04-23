@@ -1,0 +1,94 @@
+Config for unit '59021' deployed 2023-05-24 18:14:16
+Version Major	3
+Version Minor	32
+Version Date	20201210   
+Unit Serial Number	59021      
+CPU	17730
+Parameter Version	2
+Instrument Type	AZFP
+DataOutput	FLASH
+SoundSpeed	1519.000000
+Acquisition Start:	Mar 29, 2023 20:09:37
+Number of phases	1
+Date span: Mar 29, 2023 20:09:37 - Mar 30, 2023 20:09:36
+---
+Phase 1
+Acquisition Period:	Mar 29, 2023 20:09:37 - Continuous
+Duration	86400 seconds	(1.0000 days)
+Phase Type	'NORMAL'
+Burst Interval	2 sec
+Pings Per Burst	1 pings
+Ping Period	2 sec
+Average Burst Pings	yes
+F1 Frequency    	67 Hz
+F1 Acquire Freq 	1 bool
+F1 Pulse Length 	350 us
+F1 Dig. Rate    	40 kHz (0.0190 m/smpl)
+F1 Range Samples	5266 smpl
+F1 Range Averaging Samples	2 smpl
+F1 LockOutIndex	0 index
+F1 Storage Format	1 (Avg Linear)
+F2 Frequency    	120 Hz
+F2 Acquire Freq 	1 bool
+F2 Pulse Length 	350 us
+F2 Dig. Rate    	40 kHz (0.0190 m/smpl)
+F2 Range Samples	5266 smpl
+F2 Range Averaging Samples	2 smpl
+F2 LockOutIndex	0 index
+F2 Storage Format	1 (Avg Linear)
+F3 Frequency    	200 Hz
+F3 Acquire Freq 	1 bool
+F3 Pulse Length 	350 us
+F3 Dig. Rate    	40 kHz (0.0190 m/smpl)
+F3 Range Samples	5266 smpl
+F3 Range Averaging Samples	2 smpl
+F3 LockOutIndex	0 index
+F3 Storage Format	1 (Avg Linear)
+---------------------------------------
+Config for unit '59021' deployed 2023-05-24 18:39:15
+Version Major	3
+Version Minor	32
+Version Date	20201210   
+Unit Serial Number	59021      
+CPU	17730
+Parameter Version	2
+Instrument Type	AZFP
+DataOutput	FLASH
+SoundSpeed	1519.000000
+Acquisition Start:	Mar 29, 2023 20:09:37
+Number of phases	1
+Date span: Mar 29, 2023 20:09:37 - Mar 30, 2023 20:09:36
+---
+Phase 1
+Acquisition Period:	Mar 29, 2023 20:09:37 - Continuous
+Duration	86400 seconds	(1.0000 days)
+Phase Type	'NORMAL'
+Burst Interval	2 sec
+Pings Per Burst	1 pings
+Ping Period	2 sec
+Average Burst Pings	yes
+F1 Frequency    	67 Hz
+F1 Acquire Freq 	1 bool
+F1 Pulse Length 	350 us
+F1 Dig. Rate    	40 kHz (0.0190 m/smpl)
+F1 Range Samples	5266 smpl
+F1 Range Averaging Samples	2 smpl
+F1 LockOutIndex	0 index
+F1 Storage Format	1 (Avg Linear)
+F2 Frequency    	120 Hz
+F2 Acquire Freq 	1 bool
+F2 Pulse Length 	350 us
+F2 Dig. Rate    	40 kHz (0.0190 m/smpl)
+F2 Range Samples	5266 smpl
+F2 Range Averaging Samples	2 smpl
+F2 LockOutIndex	0 index
+F2 Storage Format	1 (Avg Linear)
+F3 Frequency    	200 Hz
+F3 Acquire Freq 	1 bool
+F3 Pulse Length 	350 us
+F3 Dig. Rate    	40 kHz (0.0190 m/smpl)
+F3 Range Samples	5266 smpl
+F3 Range Averaging Samples	2 smpl
+F3 LockOutIndex	0 index
+F3 Storage Format	1 (Avg Linear)
+---------------------------------------

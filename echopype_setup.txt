@@ -1,0 +1,21 @@
+# download, install and setup either miniconda or anaconda
+
+https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html
+
+# Ones it is installed, under the Anaconda3 folder in the Start menu should be a couple of terminal options: 
+# Anaconda Powershell Prompt and/or Anaconda Prompt. 
+# Select Anaconda Prompt. Then cd to directory with this "environment.yml" file,
+# configure the python environment:
+
+conda env create -f environment.yml
+conda activate echopype
+jupyter notebook
+ 
+# if the notebook doesn't launch, then you'll need to install the needed notebook packages into the environment 
+# and then start the notebook:
+ 
+conda install notebook nb_conda_kernels jupyter_contrib_nbextensions
+jupyter notebook
+ 
+# Make sure you are at a level in the directory tree where you can navigate down to the notebook. You can't go up 
+# in the directory tree.

@@ -1,0 +1,16 @@
+name: echopype
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.8
+  - pip
+  - cmocean
+  - echopype==0.6.0
+  - h5netcdf
+  - matplotlib
+  - numpy
+  - pandas
+  - pillow
+  - python-dateutil
+  - xarray
