@@ -92,14 +92,16 @@ def glider_process(data_directory, output_directory, xml_file, glider_temp, glid
         time_min = ds.platform.time2.values[0]
         time_max = ds.platform.time2.values[-1]
 
-        for i in range(3):
-            plt.figure()
-            epviz.create_echogram(ds_sv_clean, get_range=True, robust=True, vmin=-90, vmax=-50)
-            plt.title(f'{time_min} - {time_max}')
-            plt.savefig(os.path.join(figures_directory + f'{file}_plot_{i + 1}.png'), dpi=300, bbox_inches='tight') # save the echogram figure to figures directory
-            plt.close()
+        # Create echograms and iterate over the returned FacetGrid objects
+        echograms = epviz.create_echogram(ds_sv_clean, get_range=True, robust=True, vmin=-90, vmax=-50)
+        frequency_labels = ["67_Hz", "120_Hz", "200_Hz"]  # Define frequency labels for the plots
 
-
+        for i, echogram in enumerate(echograms):
+            # Use the corresponding frequency label for the plot
+            frequency_label = frequency_labels[i]
+            echogram.fig.suptitle(f'{time_min} - {time_max} ({frequency_label})')  # Add a title to the plot
+            echogram.fig.savefig(os.path.join(figures_directory, f'{file}_{frequency_label}.png'), dpi=300, bbox_inches='tight')
+            plt.close(echogram.fig)  # Close the figure to free up memory
 
 data_directory = r"C:\Users\marqjace\OneDrive - Oregon State University\Desktop\Python\azfp\data\may_2023\to_process"
 output_directory = r"C:\Users\marqjace\OneDrive - Oregon State University\Desktop\Python\azfp\data\may_2023\processed"
