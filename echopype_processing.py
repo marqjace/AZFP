@@ -21,6 +21,7 @@ def convert_raw(data_directory, output_directory, xml_file):
     :param data_directory: str, path to the directory containing the raw echogram data files
     :param output_directory: str, path to the directory where the converted netCDF files will be saved
     :param xml_file: str, path to the XML file containing the sonar configuration
+
     :return: Converted and calibrated bioacoustic sonar data in a xarray dataset object
     """
 
@@ -51,15 +52,21 @@ def convert_raw(data_directory, output_directory, xml_file):
         ed.to_netcdf(os.path.join(output_directory, os.path.split(raw_file)[1] + '.raw.nc'))
         ed_list.append(ed)
 
-    # combine the data into a single dataset
-    ds = ep.combine_echodata(ed_list)
-
     return ed_list
 
 
 def glider_process(data_directory, output_directory, xml_file, glider_temp, glider_salinity):
     """
+    This function takes the converted and calibrated echogram data from the glider AZFP, processes it, and generates echograms.
+    It also saves the echograms as PNG files in the specified figures directory within '/processed'.
 
+    :param data_directory: str, path to the directory containing the raw echogram data files
+    :param output_directory: str, path to the directory where the converted netCDF files will be saved
+    :param xml_file: str, path to the XML file containing the sonar configuration
+    :param glider_temp: numpy array, temperature values for the glider
+    :param glider_salinity: numpy array, salinity values for the glider
+    
+    :return: Saved echograms as PNG files in the figures directory
     """
 
     figures_directory = os.path.join(output_directory, 'figures/')
@@ -92,16 +99,19 @@ def glider_process(data_directory, output_directory, xml_file, glider_temp, glid
         time_min = ds.platform.time2.values[0]
         time_max = ds.platform.time2.values[-1]
 
-        # Create echograms and iterate over the returned FacetGrid objects
+        # Create a new directory for each file
+        file_directory = os.path.join(figures_directory, file)
+        if not os.path.exists(file_directory):
+            os.mkdir(file_directory)
+
         echograms = epviz.create_echogram(ds_sv_clean, get_range=True, robust=True, vmin=-90, vmax=-50)
-        frequency_labels = ["67_Hz", "120_Hz", "200_Hz"]  # Define frequency labels for the plots
+        frequency_labels = ["67_kHz", "120_kHz", "200_kHz"]  
 
         for i, echogram in enumerate(echograms):
-            # Use the corresponding frequency label for the plot
             frequency_label = frequency_labels[i]
-            echogram.fig.suptitle(f'{time_min} - {time_max} ({frequency_label})')  # Add a title to the plot
-            echogram.fig.savefig(os.path.join(figures_directory, f'{file}_{frequency_label}.png'), dpi=300, bbox_inches='tight')
-            plt.close(echogram.fig)  # Close the figure to free up memory
+            echogram.fig.suptitle(f'{time_min} - {time_max} ({frequency_label})')
+            echogram.fig.savefig(os.path.join(file_directory, f'{file}_{frequency_label}.png'), dpi=300, bbox_inches='tight')
+            plt.close(echogram.fig)
 
 data_directory = r"C:\Users\marqjace\OneDrive - Oregon State University\Desktop\Python\azfp\data\may_2023\to_process"
 output_directory = r"C:\Users\marqjace\OneDrive - Oregon State University\Desktop\Python\azfp\data\may_2023\processed"
