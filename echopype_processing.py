@@ -10,6 +10,7 @@ import glob
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.io
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -55,7 +56,7 @@ def convert_raw(data_directory, output_directory, xml_file):
     return ed_list
 
 
-def glider_process(data_directory, output_directory, xml_file, glider_temp, glider_salinity):
+def glider_process(data_directory, output_directory, xml_file, glider_temp, glider_salinity, glider_depth):
     """
     This function takes the converted and calibrated echogram data from the glider AZFP, processes it, and generates echograms.
     It also saves the echograms as PNG files in the specified figures directory within '/processed'.
@@ -79,12 +80,18 @@ def glider_process(data_directory, output_directory, xml_file, glider_temp, glid
     # this information from the glider CTD record if we were doing this processing for real.
     temperature = glider_temp
     salinity = glider_salinity
+    depth = glider_depth
 
     # calculate Sv for each file and save the results per file to disk for further analysis
     for ds in ed_list:
         time_record = np.array([ds.environment.time1.values[0], ds.environment.time1.values[-1]]).astype(float)
-        t = np.interp(ds.environment.time1.values.astype(float), time_record, temperature)
-        s = np.interp(ds.environment.time1.values.astype(float), time_record, salinity)
+        t = np.interp(ds.environment.time1.values.astype(float), time_record, temperature[:len(time_record)])
+        s = np.interp(ds.environment.time1.values.astype(float), time_record, salinity[:len(time_record)])
+        d = np.interp(ds.environment.time1.values.astype(float), time_record, depth[:len(time_record)])
+        
+        print("depth:", depth)
+        print("Interpolated depth (d):", d)
+        
         env_params = {
             'pressure': 0.0,  # will always set to 0, replace after the fact
             'temperature': np.mean(t),
@@ -93,6 +100,16 @@ def glider_process(data_directory, output_directory, xml_file, glider_temp, glid
         ds_sv = ep.calibrate.compute_Sv(ds, env_params=env_params)
         path, file = os.path.split(ds.provenance.source_filenames.values[0])
         ds_sv.to_netcdf(os.path.join(output_directory, file + '.proc.nc')) # save the processed data as .proc.nc
+
+        if 'echo_range' in ds_sv:
+            echo_range = ds_sv['echo_range']
+            # Ensure depth is reshaped to match echo_range dimensions
+            depth_reshaped = np.broadcast_to(d, echo_range.shape)
+
+            print("original_echo_range shape:", echo_range.shape)
+            print("depth_reshaped shape:", depth_reshaped.shape)
+
+            ds_sv['echo_range'] = echo_range + depth_reshaped
 
         ds_sv_clean = ep.preprocess.remove_noise(ds_sv, range_sample_num=30, ping_num=5) # remove noise from the Sv data
 
@@ -113,12 +130,18 @@ def glider_process(data_directory, output_directory, xml_file, glider_temp, glid
             echogram.fig.savefig(os.path.join(file_directory, f'{file}_{frequency_label}.png'), dpi=300, bbox_inches='tight')
             plt.close(echogram.fig)
 
+
 data_directory = r"C:\Users\marqjace\OneDrive - Oregon State University\Desktop\Python\azfp\data\may_2023\to_process"
 output_directory = r"C:\Users\marqjace\OneDrive - Oregon State University\Desktop\Python\azfp\data\may_2023\processed"
 xml_file = 'tweaked.xml'
 
 glider_temp = np.array([15, 7])
 glider_salinity = np.array([32, 34])
+glider_depth = np.arange(0, 251, 1)
 
-glider_process(data_directory, output_directory, xml_file, glider_temp, glider_salinity)
+# gdata = scipy.io.loadmat(r"C:\Users\marqjace\OneDrive - Oregon State University\Desktop\Python\azfp\data\may_2023\WA_202305241820-deployment_osu592_pass3.mat")
+# glider_temp = gdata['Temp']
+# glider_salinity = gdata['Salt']
+
+glider_process(data_directory, output_directory, xml_file, glider_temp, glider_salinity, glider_depth)
 
